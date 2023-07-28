@@ -46,13 +46,13 @@ class PipeTransport(ServerTransport):
 
     def receive_message(self):
         data = self.input.readline()
-        print(">> {}".format(data))
+        print(f">> {data}")
         return None, urlparse.unquote(data)
 
     def send_reply(self, context, reply):
         reply = str(reply, "utf-8")
-        print("<< {}".format(reply))
-        self.output.write("{}\n".format(reply))
+        print(f"<< {reply}")
+        self.output.write(f"{reply}\n")
 
 
 def sanitize(txt, limit=100):
@@ -281,17 +281,14 @@ class StdIOHandler:
             )
         )
         isPassword = req.get("isPassword")
-        if not isPassword:
-            return {"text": input()}
-
-        return ""
+        return {"text": input()} if not isPassword else ""
 
 
 def main(args):
     cmd = ["clef", "--stdio-ui"]
     if len(args) > 0 and args[0] == "test":
         cmd.extend(["--stdio-ui-test"])
-    print("cmd: {}".format(" ".join(cmd)))
+    print(f'cmd: {" ".join(cmd)}')
 
     dispatcher = RPCDispatcher()
     dispatcher.register_instance(StdIOHandler(), "ui_")
